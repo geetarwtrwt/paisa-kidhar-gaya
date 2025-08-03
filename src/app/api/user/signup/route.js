@@ -2,6 +2,7 @@ import { writeFile } from "fs/promises";
 import { User } from "@backend/model/user";
 import { connectDb } from "@backend/db/db";
 import { NextResponse } from "next/server";
+import path from "path";
 
 export const POST = async (request) => {
   try {
@@ -32,8 +33,14 @@ export const POST = async (request) => {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const fileName = `${file.name}_${timeStamp}`;
-    const path = `./public/userProfile/${fileName}`;
-    await writeFile(path, buffer);
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "userProfile",
+      fileName
+    );
+    await writeFile(filePath, buffer);
+
     const profileImg = `/userProfile/${fileName}`;
 
     await User.create({
