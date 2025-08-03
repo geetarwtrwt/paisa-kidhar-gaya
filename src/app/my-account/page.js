@@ -117,7 +117,7 @@ export default function MyAccountPage() {
                   alt="Profile Preview"
                   width={80}
                   height={80}
-                  className="rounded-full object-cover"
+                  className="w-[80px] overflow-hidden rounded-full object-cover border-2 border-primary"
                 />
                 {/* <button
                   type="button"
@@ -131,7 +131,7 @@ export default function MyAccountPage() {
               </div>
             ) : (
               <label className="cursor-pointer text-gray-600  flex items-center gap-1 group">
-                <FaRegUser className="text-6xl rounded-full group-hover:text-black  border-2 border-gray-400 group-hover:border-black" />
+                <FaRegUser className="text-6xl rounded-full group-hover:text-black  border-2 border-primary group-hover:border-black" />
                 <FiUpload className="-translate-x-6 translate-y-4 p-1 bg-green-500 text-white rounded-full text-3xl" />
                 <input
                   type="file"
