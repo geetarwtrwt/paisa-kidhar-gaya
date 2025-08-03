@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify";
 import { ProvideContext } from "@/app/UseAuth";
 import { Raleway } from "next/font/google";
 import UserLayout from "@/app/userlayout";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const ralewaySans = Raleway({
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${ralewaySans.variable} antialiased`}>
         <ProvideContext>
-          <UserLayout>{children}</UserLayout>
+          <UserLayout>
+            {children} <SpeedInsights />
+          </UserLayout>
           <ToastContainer autoClose={1500} hideProgressBar />
         </ProvideContext>
       </body>
