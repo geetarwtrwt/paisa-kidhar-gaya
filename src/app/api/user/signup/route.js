@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
-import { User } from "../../../../../backend/model/user";
-import { connectDb } from "../../../../../backend/db/db";
+import { User } from "@backend/model/user";
+import { connectDb } from "@backend/db/db";
 import { NextResponse } from "next/server";
 
 export const POST = async (request) => {

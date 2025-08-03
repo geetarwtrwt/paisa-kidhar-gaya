@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { User } from "../../../../../backend/model/user";
-import { connectDb } from "../../../../../backend/db/db";
+import { User } from "@backend/model/user";
+import { connectDb } from "@backend/db/db";
 import { NextResponse } from "next/server";
 
 const secret = process.env.JWT_SECRET;

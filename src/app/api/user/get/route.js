@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { connectDb } from "../../../../../backend/db/db";
-import { User } from "../../../../../backend/model/user";
-import { validateToken } from "../../../../../backend/helper";
+import { connectDb } from "@backend/db/db";
+import { User } from "@backend/model/user";
+import { validateToken } from "@backend/helper";
 
 export const GET = async (request) => {
   try {
