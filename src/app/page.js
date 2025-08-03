@@ -1,18 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { IoMdCard } from "react-icons/io";
 import { RiHandCoinFill } from "react-icons/ri";
-import { FaBars } from "react-icons/fa";
-import { IoClose, IoWallet } from "react-icons/io5";
-import SideBar from "@/app/component/SideBar";
+import { IoWallet } from "react-icons/io5";
 import RecentTransitions from "@/app/component/RecentTransitions";
 import CustomPieChart from "@/app/component/CustomPieChart";
 import BarChartData from "@/app/component/BarChartData";
 import { useAuth } from "@/app/UseAuth";
+import moment from "moment";
 
 export default function Home() {
   let { dashboardData } = useAuth();
-  const [open, setOpen] = useState(false);
   let {
     totalBalance,
     totalIncome,
@@ -38,43 +36,13 @@ export default function Home() {
     amount: e.amount,
     fill: "#4f46e5",
   }));
+  console.log(dashboardData);
+
   return (
     <>
       <div className="min-h-screen relative">
-        <div className="border-borderLight border-b-2 font-bold py-4">
-          <div className="containerBox flex items-center gap-4">
-            {open ? (
-              <IoClose
-                onClick={() => setOpen(!open)}
-                className="cursor-pointer md:hidden block text-2xl"
-              />
-            ) : (
-              <FaBars
-                onClick={() => setOpen(!open)}
-                className="cursor-pointer md:hidden block text-2xl"
-              />
-            )}
-            <h2 className="text-2xl">Paisa Kidhar Gaya?</h2>
-          </div>
-        </div>
-
         <div className="containerBox flex gap-8 min-h-screen">
-          <div className="h-full sticky top-10">
-            {open && (
-              <div
-                className={`${
-                  open ? "block" : "hidden"
-                } absolute left-0 h-screen z-50 bg-bgColor md:hidden`}
-              >
-                <SideBar setOpen={setOpen} />
-              </div>
-            )}
-            <div className="hidden md:block">
-              <SideBar setOpen={setOpen} />
-            </div>
-          </div>
-
-          <div className="pt-8 w-full border-l-2 border-borderLight pl-8">
+          <div className="pt-8 w-full pl-8">
             <div className="flex justify-between gap-8 md:flex-row flex-col">
               {dashboardData && (
                 <>
@@ -108,52 +76,73 @@ export default function Home() {
                 </>
               )}
             </div>
+            {dashboardData?.recentTransitions.length > 0 ? (
+              <>
+                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
+                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    <RecentTransitions
+                      headingTitle={"Recent Transitions"}
+                      link={"/expense"}
+                      buttonTrue={true}
+                      transition={dashboardData?.recentTransitions}
+                    />
+                  </div>
 
-            <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-              <RecentTransitions
-                headingTitle={"Recent Transitions"}
-                link={"/expense"}
-                transition={dashboardData?.recentTransitions}
-              />
-              {recentTransitionData.length > 0 && (
-                <CustomPieChart
-                  title={"Financial Overview"}
-                  pieChartData={recentTransitionData}
-                  centerText={"Total Overview"}
-                />
-              )}
-            </div>
+                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    {recentTransitionData.length > 0 && (
+                      <CustomPieChart
+                        title={"Financial Overview"}
+                        pieChartData={recentTransitionData}
+                        centerText={"Total Overview"}
+                      />
+                    )}
+                  </div>
+                </div>
 
-            <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-              <RecentTransitions
-                headingTitle={"Expenses"}
-                link={"/expense"}
-                transition={dashboardData?.last30DaysExpense.transition?.slice(
-                  0,
-                  5
-                )}
-              />
-              {recentExpenseData && recentExpenseData.length > 0 && (
-                <BarChartData
-                  headingTitle={"Last 30 Days Expenses"}
-                  transition={recentExpenseData}
-                />
-              )}
-            </div>
+                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
+                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    <RecentTransitions
+                      headingTitle={"Expenses"}
+                      link={"/expense"}
+                      buttonTrue={true}
+                      transition={dashboardData?.last30DaysExpense.transition}
+                    />
+                  </div>
+                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    {recentExpenseData && recentExpenseData.length > 0 && (
+                      <BarChartData
+                        headingTitle={"Last 30 Days Expenses"}
+                        transition={recentExpenseData}
+                      />
+                    )}
+                  </div>
+                </div>
 
-            <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-              {recentIncomeData && recentIncomeData.length > 0 && (
-                <CustomPieChart
-                  title={"Incomes"}
-                  pieChartData={recentIncomeData}
-                />
-              )}
-              <RecentTransitions
-                headingTitle={"Incomes"}
-                link={"/income"}
-                transition={dashboardData?.last60DaysIncome.transition}
-              />
-            </div>
+                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
+                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    {recentIncomeData && recentIncomeData.length > 0 && (
+                      <CustomPieChart
+                        title={"Last 30 Days Incomes"}
+                        pieChartData={recentIncomeData}
+                      />
+                    )}
+                  </div>
+
+                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                    <RecentTransitions
+                      headingTitle={"Incomes"}
+                      link={"/income"}
+                      buttonTrue={true}
+                      transition={dashboardData?.last60DaysIncome.transition}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-3xl font-bold text-primary">No Data</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

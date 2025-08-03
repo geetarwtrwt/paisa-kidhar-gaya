@@ -8,7 +8,7 @@ import { FaRegUser } from "react-icons/fa";
 import { useAuth } from "@/app/UseAuth";
 
 export default function MyAccountPage() {
-  let { route, getUserData, dashboardData } = useAuth();
+  let { route, getUserData, getDashBoardData } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [imgPreview, setImgPreview] = useState(null);
@@ -53,11 +53,12 @@ export default function MyAccountPage() {
             email: "",
             password: "",
           });
-          route.push("/");
           await getUserData();
-          await dashboardData();
+          await getDashBoardData();
+          route.push("/");
+        } else {
+          toast.error(res.data.error);
         }
-        console.log(res);
       } else {
         const { fullName, email, password } = formData;
         if (!profileImg) return toast.error("Please upload profile image");

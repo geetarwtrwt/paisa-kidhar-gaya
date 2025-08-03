@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { connectDb } from "../../../../../backend/db/db";
-import { Income } from "../../../../../backend/model/income";
-import { validateToken } from "../../../../../backend/helper";
+import { connectDb } from "../../../../../../backend/db/db";
+import { Income } from "../../../../../../backend/model/income";
+import { validateToken } from "../../../../../../backend/helper";
 
 export const DELETE = async (request, { params }) => {
   try {
@@ -21,7 +21,7 @@ export const DELETE = async (request, { params }) => {
       );
     }
 
-    await Income.findByIdAndDelete({ incomeId });
+    await Income.findByIdAndDelete(incomeId);
     return NextResponse.json({
       success: true,
       msg: "Income deleted successfully",

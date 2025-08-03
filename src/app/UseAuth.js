@@ -46,6 +46,8 @@ export let ProvideContext = ({ children }) => {
         getDashBoardData,
         user,
         dashboardData,
+        setUser,
+        setDashboardData,
       }}
     >
       {children}

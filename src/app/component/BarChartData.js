@@ -11,9 +11,10 @@ import {
 } from "recharts";
 
 export default function BarChartData({ headingTitle, transition }) {
+  console.log(transition);
   return (
     <>
-      <div className="flex flex-col gap-12 justify-between font-semibold w-full md:w-[45%] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+      <div className="flex flex-col gap-12 justify-between font-semibold w-full">
         <h5 className="text-xl text-left">{headingTitle}</h5>
         <div className="w-full">
           <ResponsiveContainer width="100%" height={180}>
@@ -36,7 +37,10 @@ export default function BarChartData({ headingTitle, transition }) {
               />
               <YAxis />
               <Tooltip
-                formatter={(value, name) => [value, name.toUpperCase()]}
+                formatter={(value, name) => [
+                  value,
+                  name.charAt(0).toUpperCase() + name.slice(1),
+                ]}
               />
               <Legend
                 formatter={(value) =>

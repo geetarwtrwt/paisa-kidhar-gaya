@@ -3,22 +3,31 @@ import moment from "moment";
 import { FaArrowRight, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import { FaUtensils } from "react-icons/fa";
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
 import { useAuth } from "@/app/UseAuth";
-import Image from "next/image";
 
-function RecentTransitions({ headingTitle, link, transition }) {
+function RecentTransitions({
+  headingTitle,
+  link,
+  transition,
+  handleDelete,
+  buttonTrue,
+}) {
   let { route } = useAuth();
+
   return (
     <>
-      <div className="flex flex-col gap-12 shadow-xl border-borderLight border-2 rounded-md px-6 py-8 w-full md:w-[45%] ">
+      <div className="flex flex-col gap-12">
         <div className="flex justify-between font-semibold">
           <h5 className="text-xl">{headingTitle}</h5>
-          <button
-            onClick={() => route.push(link)}
-            className="cursor-pointer flex items-center gap-4 bg-primary hover:bg-secondary py-2 px-2 rounded-md text-white"
-          >
-            See More <FaArrowRight />
-          </button>
+          {buttonTrue && (
+            <button
+              onClick={() => route.push(link)}
+              className="cursor-pointer flex items-center gap-4 bg-primary hover:bg-secondary py-2 px-2 rounded-md text-white"
+            >
+              See More <FaArrowRight />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-col gap-8">
@@ -26,8 +35,8 @@ function RecentTransitions({ headingTitle, link, transition }) {
             return (
               <div className="flex justify-between" key={e._id}>
                 <div className="flex items-center gap-4">
-                  <div className="bg-borderLight p-4 text-2xl rounded-full">
-                    {e.icon ? <Image src={e.icon} /> : <FaUtensils />}
+                  <div className="bg-borderLight p-4 text-3xl w-16 h-16 border-2 border-primary text-primary flex items-center justify-center rounded-full">
+                    {e.icon ? <div>{e.icon}</div> : <FaUtensils />}
                   </div>
                   <div className="flex flex-col">
                     <p className="capitalize text-lg font-medium">
@@ -39,16 +48,22 @@ function RecentTransitions({ headingTitle, link, transition }) {
                   </div>
                 </div>
 
-                <div
-                  className={`flex items-center gap-2 text-sm h-fit py-0.5 px-2 rounded-md ${
-                    e.type === "expense"
-                      ? "bg-red-300 text-red-600"
-                      : "bg-green-300 text-green-600"
-                  }`}
-                >
-                  {e.type === "expense" ? <FaMinus /> : <FaPlus />}
-                  <p className="text-lg">₹{e.amount}</p>
-                  {e.type === "expense" ? <FaArrowDown /> : <FaArrowUp />}
+                <div className="flex items-center gap-4">
+                  <MdDelete
+                    onClick={() => handleDelete(e._id)}
+                    className="text-3xl text-primary hover:text-red-500 duration-1000 cursor-pointer"
+                  />
+                  <div
+                    className={`flex items-center gap-2 text-sm h-fit py-0.5 px-2 rounded-md ${
+                      e.type === "expense"
+                        ? "bg-red-300 text-red-600"
+                        : "bg-green-300 text-green-600"
+                    }`}
+                  >
+                    {e.type === "expense" ? <FaMinus /> : <FaPlus />}
+                    <p className="text-lg">₹{e.amount}</p>
+                    {e.type === "expense" ? <FaArrowDown /> : <FaArrowUp />}
+                  </div>
                 </div>
               </div>
             );

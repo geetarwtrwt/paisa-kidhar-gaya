@@ -9,8 +9,22 @@ import Image from "next/image";
 import { useAuth } from "@/app/UseAuth";
 
 export default function SideBar({ setOpen }) {
-  let { pathName, user } = useAuth();
-
+  let { pathName, user, axios, route, toast, setUser, setDashboardData } =
+    useAuth();
+  let handleLogout = async () => {
+    try {
+      let res = await axios.post("/api/user/logout");
+      if (res.data.success) {
+        setUser(null);
+        setDashboardData(null);
+        route.push("/my-account");
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
   return (
     <>
       <div className="capitalize text-xl flex flex-col gap-8 pt-8 ">
@@ -21,12 +35,13 @@ export default function SideBar({ setOpen }) {
               alt="User Img"
               width={80}
               height={80}
-              className="w-[100px] rounded-full border-borderLight border-2"
+              priority
+              className="w-[100px] rounded-full border-primary border-2"
             />
           ) : (
-            <FaUser className="w-[100px] h-[100px] rounded-full border-borderLight border-2" />
+            <FaUser className="w-[100px] h-[100px] rounded-full border-2 border-primary" />
           )}
-          <p>{user?.fullName}</p>
+          <p className="text-primary">{user?.fullName}</p>
         </div>
         <Link
           href="/"
@@ -61,17 +76,12 @@ export default function SideBar({ setOpen }) {
         >
           <RiHandCoinFill /> expense
         </Link>
-        <Link
-          href="/logout"
-          className={`flex items-center justify-center py-1.5 px-2 rounded-md gap-4 ${
-            pathName === "/logout"
-              ? "bg-primary text-white"
-              : "hover:bg-secondary hover:text-white"
-          }`}
-          onClick={() => setOpen(false)}
+        <button
+          onClick={() => handleLogout()}
+          className={`cursor-pointer flex items-center justify-center py-1.5 px-2 rounded-md gap-4 hover:bg-secondary hover:text-white`}
         >
           <IoLogOut /> logout
-        </Link>
+        </button>
       </div>
     </>
   );

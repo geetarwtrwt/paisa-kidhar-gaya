@@ -3,7 +3,7 @@ import { User } from "../../../../../backend/model/user";
 import { connectDb } from "../../../../../backend/db/db";
 import { NextResponse } from "next/server";
 
-const secret = process.env.JWT_SECRET || "jwtsecretkey";
+const secret = process.env.JWT_SECRET;
 
 export const POST = async (req) => {
   try {
