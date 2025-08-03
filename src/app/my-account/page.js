@@ -111,18 +111,14 @@ export default function MyAccountPage() {
         {!isLogin && (
           <div className="flex flex-col items-center gap-2 mb-4">
             {imgPreview ? (
-              <div className="w-20 h-20 relative">
+              <div className="w-20 h-20 relative overflow-hidden">
                 <Image
                   src={imgPreview}
                   alt="Profile Preview"
                   width={80}
                   height={80}
-                  className="w-[80px] overflow-hidden rounded-full object-cover border-2 border-primary"
+                  className="w-[80px] h-[80px] object-cover rounded-full  border-2 border-primary"
                 />
-                {/* <button
-                  type="button"
-                  className="translate-x-8 -translate-y-4 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                > */}
                 <FiTrash
                   onClick={handleImageDelete}
                   className="absolute -right-2 bottom-0 bg-red-500 text-white rounded-full text-3xl p-1"
