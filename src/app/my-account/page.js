@@ -8,7 +8,7 @@ import { FaRegUser } from "react-icons/fa";
 import { useAuth } from "@/app/UseAuth";
 
 export default function MyAccountPage() {
-  let { route, getUserData, getDashBoardData } = useAuth();
+  let { route, getUserData, getDashBoardData, toast } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [imgPreview, setImgPreview] = useState(null);
@@ -29,6 +29,12 @@ export default function MyAccountPage() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (!["png", "jpg", "jpeg"].includes(ext)) {
+      toast.error("Only JPG, JPEG, PNG files allowed");
+      return;
+    }
     if (file) {
       setProfileImg(file);
       setImgPreview(URL.createObjectURL(file));
@@ -44,8 +50,9 @@ export default function MyAccountPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      const { fullName, email, password } = formData;
+
       if (isLogin) {
-        const { email, password } = formData;
         let res = await axios.post("/api/user/login", { email, password });
         if (res.data.success) {
           toast.success("Login Successful");
@@ -57,35 +64,31 @@ export default function MyAccountPage() {
           await getDashBoardData();
           route.push("/");
         } else {
-          toast.error(res.data.error);
+          toast.error(res.data.msg);
         }
       } else {
-        const { fullName, email, password } = formData;
         if (!profileImg) return toast.error("Please upload profile image");
 
-        let form = new FormData();
-        form.append("fullName", fullName);
-        form.append("email", email);
-        form.append("password", password);
-        form.append("profileImg", profileImg);
-        form.append("upload_preset", "my_unsigned_preset");
-        form.append("cloud_name", "dgllhyxgc");
+        let uploadForm = new FormData();
+        uploadForm.append("profileImg", profileImg);
+        uploadForm.append("upload_preset", "my_unsigned_preset");
+        uploadForm.append("cloud_name", "dgllhyxgc");
 
         const cloudinaryRes = await fetch(
           "https://api.cloudinary.com/v1_1/dgllhyxgc/image/upload",
           {
             method: "POST",
-            body: form,
+            body: uploadForm,
           }
         );
-        const cloudinaryData = await cloudinaryRes.json();
-        const profileImgUrl = cloudinaryData.secure_url;
+        const data = await cloudinaryRes.json();
+        if (!data?.secure_url) throw new Error("Image upload failed");
 
         let res = await axios.post("/api/user/signup", {
           fullName,
           email,
           password,
-          profileImg: profileImgUrl,
+          profileImg: data.secure_url,
         });
         if (res.data.success) {
           toast.success("Signup Successful");
@@ -97,8 +100,9 @@ export default function MyAccountPage() {
           });
           setImgPreview(null);
           setProfileImg(null);
+        } else {
+          toast.error(res.data.msg);
         }
-        console.log(res);
       }
     } catch (err) {
       toast.error(err.response?.data?.msg || "Something went wrong");

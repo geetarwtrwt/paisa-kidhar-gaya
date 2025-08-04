@@ -2,20 +2,22 @@ import { writeFile } from "fs/promises";
 import { User } from "@backend/model/user";
 import { connectDb } from "@backend/db/db";
 import { NextResponse } from "next/server";
-import path from "path";
 import { cloudinary } from "@backend/cloudinary";
 
 export const POST = async (request) => {
   try {
     await connectDb();
-    const formData = await request.formData();
-
-    const fullName = formData.get("fullName");
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const file = formData.get("profileImg");
+    let body = await request.json();
 
     if (!fullName || !email || !password || !file) {
+      return NextResponse.json(
+        { success: false, msg: "All fields are required" },
+        { status: 400 }
+      );
+    }
+    const { fullName, email, password, profileImg } = body;
+
+    if (!fullName || !email || !password || !profileImg) {
       return NextResponse.json(
         { success: false, msg: "All fields are required" },
         { status: 400 }
@@ -29,34 +31,21 @@ export const POST = async (request) => {
         { status: 400 }
       );
     }
-
-    let mimeType = image.type;
-    if (!["image/png", "image/jpg", "image/jped"].includes(mimeType)) {
+    const allowedTypes = ["png", "jpg", "jpeg"];
+    const ext = profileImg.split(".").pop().toLowerCase();
+    if (!allowedTypes.includes(ext)) {
       return NextResponse.json(
-        { error: true, msg: "Invalid image formate" },
+        { success: false, msg: "Invalid image format" },
         { status: 400 }
       );
     }
+    await User.create({
+      fullName,
+      email,
+      password,
+      profileImg: result.secure_url,
+    });
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const uploadRes = await cloudinary.uploader.upload_stream(
-      {
-        folder: "userProfile",
-        resource_type: "image",
-      },
-      async (error, result) => {
-        if (error) {
-          throw new Error("Cloudinary upload failed");
-        }
-        await User.create({
-          fullName,
-          email,
-          password,
-          profileImg: result.secure_url,
-        });
-      }
-    );
     uploadRes.end(buffer);
     return NextResponse.json({ success: true, msg: "Signup successful" });
   } catch (err) {
