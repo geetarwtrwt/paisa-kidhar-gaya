@@ -3,6 +3,7 @@ import { User } from "@backend/model/user";
 import { connectDb } from "@backend/db/db";
 import { NextResponse } from "next/server";
 import path from "path";
+import { cloudinary } from "@backend/cloudinary";
 
 export const POST = async (request) => {
   try {
@@ -29,27 +30,34 @@ export const POST = async (request) => {
       );
     }
 
-    const timeStamp = Date.now();
+    let mimeType = image.type;
+    if (!["image/png", "image/jpg", "image/jped"].includes(mimeType)) {
+      return NextResponse.json(
+        { error: true, msg: "Invalid image formate" },
+        { status: 400 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const fileName = `${file.name}_${timeStamp}`;
-    const filePath = path.join(
-      process.cwd(),
-      "public",
-      "userProfile",
-      fileName
+    const uploadRes = await cloudinary.uploader.upload_stream(
+      {
+        folder: "userProfile",
+        resource_type: "image",
+      },
+      async (error, result) => {
+        if (error) {
+          throw new Error("Cloudinary upload failed");
+        }
+        await User.create({
+          fullName,
+          email,
+          password,
+          profileImg: result.secure_url,
+        });
+      }
     );
-    await writeFile(filePath, buffer);
-
-    const profileImg = `/userProfile/${fileName}`;
-
-    await User.create({
-      fullName,
-      email,
-      password,
-      profileImg,
-    });
-
+    uploadRes.end(buffer);
     return NextResponse.json({ success: true, msg: "Signup successful" });
   } catch (err) {
     return NextResponse.json({ success: false, msg: err.message });

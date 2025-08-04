@@ -68,8 +68,25 @@ export default function MyAccountPage() {
         form.append("email", email);
         form.append("password", password);
         form.append("profileImg", profileImg);
+        form.append("upload_preset", "my_unsigned_preset");
+        form.append("cloud_name", "dgllhyxgc");
 
-        let res = await axios.post("/api/user/signup", form);
+        const cloudinaryRes = await fetch(
+          "https://api.cloudinary.com/v1_1/dgllhyxgc/image/upload",
+          {
+            method: "POST",
+            body: form,
+          }
+        );
+        const cloudinaryData = await cloudinaryRes.json();
+        const profileImgUrl = cloudinaryData.secure_url;
+
+        let res = await axios.post("/api/user/signup", {
+          fullName,
+          email,
+          password,
+          profileImg: profileImgUrl,
+        });
         if (res.data.success) {
           toast.success("Signup Successful");
           setIsLogin(!isLogin);
@@ -131,7 +148,7 @@ export default function MyAccountPage() {
                 <FiUpload className="-translate-x-6 translate-y-4 p-1 bg-green-500 text-white rounded-full text-3xl" />
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".png,.jpg,.jpeg"
                   className="hidden"
                   onChange={handleImageChange}
                 />
