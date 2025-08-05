@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { FiUpload, FiTrash } from "react-icons/fi";
 import Image from "next/image";
 import { FaRegUser } from "react-icons/fa";
 import { useAuth } from "@/app/UseAuth";
+import UploadMedia from "../component/UploadMedia";
 
 export default function MyAccountPage() {
   let { route, getUserData, getDashBoardData, toast } = useAuth();
@@ -35,10 +35,8 @@ export default function MyAccountPage() {
       toast.error("Only JPG, JPEG, PNG files allowed");
       return;
     }
-    if (file) {
-      setProfileImg(file);
-      setImgPreview(URL.createObjectURL(file));
-    }
+    setProfileImg(file);
+    setImgPreview(URL.createObjectURL(file));
   };
 
   const handleImageDelete = () => {
@@ -70,7 +68,7 @@ export default function MyAccountPage() {
         if (!profileImg) return toast.error("Please upload profile image");
 
         let uploadForm = new FormData();
-        uploadForm.append("profileImg", profileImg);
+        uploadForm.append("file", profileImg);
         uploadForm.append("upload_preset", "my_unsigned_preset");
         uploadForm.append("cloud_name", "dgllhyxgc");
 
@@ -84,11 +82,13 @@ export default function MyAccountPage() {
         const data = await cloudinaryRes.json();
         if (!data?.secure_url) throw new Error("Image upload failed");
 
+        const imageUrl = data.secure_url; // ✅ Sirf yeh string chahiye
+
         let res = await axios.post("/api/user/signup", {
           fullName,
           email,
           password,
-          profileImg: data.secure_url,
+          profileImg: imageUrl,
         });
         if (res.data.success) {
           toast.success("Signup Successful");
@@ -131,6 +131,7 @@ export default function MyAccountPage() {
 
         {!isLogin && (
           <div className="flex flex-col items-center gap-2 mb-4">
+            {/* <UploadMedia /> */}
             {imgPreview ? (
               <div className="w-20 h-20 relative overflow-hidden">
                 <Image
@@ -142,13 +143,13 @@ export default function MyAccountPage() {
                 />
                 <FiTrash
                   onClick={handleImageDelete}
-                  className="absolute -right-2 bottom-0 bg-red-500 text-white rounded-full text-3xl p-1"
+                  className="absolute right-0 bottom-0 bg-red-500 text-white rounded-full text-3xl p-1"
                 />
                 {/* </button> */}
               </div>
             ) : (
               <label className="cursor-pointer text-gray-600  flex items-center gap-1 group">
-                <FaRegUser className="text-6xl rounded-full group-hover:text-black  border-2 border-primary group-hover:border-black" />
+                <FaRegUser className="w-[80px] h-[80px] object-cover text-6xl rounded-full group-hover:text-black  border-2 border-primary group-hover:border-black" />
                 <FiUpload className="-translate-x-6 translate-y-4 p-1 bg-green-500 text-white rounded-full text-3xl" />
                 <input
                   type="file"

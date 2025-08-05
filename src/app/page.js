@@ -36,7 +36,6 @@ export default function Home() {
     amount: e.amount,
     fill: "#4f46e5",
   }));
-  console.log(dashboardData);
 
   return (
     <>
