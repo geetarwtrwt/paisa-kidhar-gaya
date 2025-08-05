@@ -11,7 +11,6 @@ import {
 } from "recharts";
 
 export default function BarChartData({ headingTitle, transition }) {
-  console.log(transition);
   return (
     <>
       <div className="flex flex-col gap-12 justify-between font-semibold w-full">

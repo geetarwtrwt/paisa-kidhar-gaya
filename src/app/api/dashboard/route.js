@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { connectDb } from "@backend/db/db";
-import { Expense } from "@backend/model/expense";
-import { Income } from "@backend/model/income";
-import { validateToken } from "@backend/helper";
+import { connectDb } from "@/backend/db/db";
+import { Expense } from "@/backend/model/expense";
+import { Income } from "@/backend/model/income";
+import { validateToken } from "@/backend/helper";
 
 export const GET = async (request) => {
   try {
@@ -46,7 +46,6 @@ export const GET = async (request) => {
     let recentTransitions = [...total5DaysExpense, ...total5DaysIncome]
       .sort((a, b) => b.createdAt - a.createdAt)
       .slice(0, 5);
-
     return NextResponse.json({
       success: true,
       msg: "Dashboard data",

@@ -46,7 +46,7 @@ export default function UserLayout({ children }) {
           </div>
         )}
 
-        <div className={`w-full ${!hideSideBar ? "md:w-[80%]" : ""} p-4`}>
+        <div className={`w-full ${!hideSideBar ? "md:w-[80%]" : ""} py-4`}>
           {children}
         </div>
       </div>

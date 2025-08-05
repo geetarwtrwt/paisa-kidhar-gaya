@@ -12,18 +12,19 @@ function RecentTransitions({
   transition,
   handleDelete,
   buttonTrue,
+  deleteButton,
 }) {
   let { route } = useAuth();
 
   return (
     <>
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12 px-6 py-8">
         <div className="flex justify-between font-semibold">
           <h5 className="text-xl">{headingTitle}</h5>
           {buttonTrue && (
             <button
               onClick={() => route.push(link)}
-              className="cursor-pointer flex items-center gap-4 bg-primary hover:bg-secondary py-2 px-2 rounded-md text-white"
+              className="cursor-pointer flex items-center gap-4 bg-primary hover:bg-secondary py-1 px-2 rounded-md  text-white "
             >
               See More <FaArrowRight />
             </button>
@@ -33,9 +34,13 @@ function RecentTransitions({
         <div className="flex flex-col gap-8">
           {transition?.map((e) => {
             return (
-              <div className="flex justify-between" key={e._id}>
+              <div
+                className="flex justify-between 
+              "
+                key={e._id}
+              >
                 <div className="flex items-center gap-4">
-                  <div className="bg-borderLight p-4 text-3xl w-16 h-16 border-2 border-primary text-primary flex items-center justify-center rounded-full">
+                  <div className="bg-borderLight p-4 text-3xl max-lg:text-3xl w-16 h-16 border-2 border-primary text-primary flex items-center justify-center rounded-full">
                     {e.icon ? <div>{e.icon}</div> : <FaUtensils />}
                   </div>
                   <div className="flex flex-col">
@@ -49,10 +54,12 @@ function RecentTransitions({
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <MdDelete
-                    onClick={() => handleDelete(e._id)}
-                    className="text-3xl text-primary hover:text-red-500 duration-1000 cursor-pointer"
-                  />
+                  {deleteButton && (
+                    <MdDelete
+                      onClick={() => handleDelete(e._id)}
+                      className="text-3xl text-primary hover:text-red-500 duration-1000 cursor-pointer"
+                    />
+                  )}
                   <div
                     className={`flex items-center gap-2 text-sm h-fit py-0.5 px-2 rounded-md ${
                       e.type === "expense"

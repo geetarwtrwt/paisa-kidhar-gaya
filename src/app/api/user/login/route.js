@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
-import { User } from "@backend/model/user";
-import { connectDb } from "@backend/db/db";
+import { connectDb } from "@/backend/db/db";
+import { User } from "@/backend/model/user";
 import { NextResponse } from "next/server";
-
-const secret = process.env.JWT_SECRET;
 
 export const POST = async (req) => {
   try {
@@ -33,12 +31,15 @@ export const POST = async (req) => {
       );
     }
 
-    const token = jwt.sign({ _id: user._id }, secret, { expiresIn: "7d" });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     const response = NextResponse.json({
       success: true,
       msg: "Login successful",
     });
+    console.log(response);
 
     response.cookies.set("token", token, {
       httpOnly: true,

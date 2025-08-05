@@ -36,7 +36,6 @@ export default function Home() {
     amount: e.amount,
     fill: "#4f46e5",
   }));
-
   return (
     <>
       <div className="min-h-screen relative">
@@ -45,7 +44,7 @@ export default function Home() {
             <div className="flex justify-between gap-8 md:flex-row flex-col">
               {dashboardData && (
                 <>
-                  <div className="flex gap-4  md:w-[30%] w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
+                  <div className="flex gap-4  md:w-[30%] flex-wrap w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
                     <IoMdCard className="text-6xl bg-primary p-4 rounded-full text-bgColor" />
                     <div>
                       <h4 className="text-label">Total Balance</h4>
@@ -54,7 +53,7 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-4 md:w-[30%] w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
+                  <div className="flex gap-4 md:w-[30%] flex-wrap w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
                     <IoWallet className="text-6xl bg-orange-500 p-4 rounded-full text-bgColor" />
                     <div>
                       <h4 className="text-label">Total Income</h4>
@@ -63,7 +62,7 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-4 md:w-[30%] w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
+                  <div className="flex gap-4 md:w-[30%] flex-wrap w-full font-semibold shadow-xl px-4 py-6 rounded-md border-borderLight border-2">
                     <RiHandCoinFill className="text-6xl bg-red-500 p-4 rounded-full text-bgColor" />
                     <div>
                       <h4 className="text-label">Total Expense</h4>
@@ -77,65 +76,71 @@ export default function Home() {
             </div>
             {dashboardData?.recentTransitions.length > 0 ? (
               <>
-                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    <RecentTransitions
-                      headingTitle={"Recent Transitions"}
-                      link={"/expense"}
-                      buttonTrue={true}
-                      transition={dashboardData?.recentTransitions}
-                    />
-                  </div>
-
-                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    {recentTransitionData.length > 0 && (
-                      <CustomPieChart
-                        title={"Financial Overview"}
-                        pieChartData={recentTransitionData}
-                        centerText={"Total Overview"}
+                {dashboardData?.recentTransitions.length > 0 && (
+                  <div className="flex justify-between my-12 lg:flex-row flex-col gap-8">
+                    <div className="w-full lg:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md">
+                      <RecentTransitions
+                        headingTitle={"Recent Transitions"}
+                        link={"/expense"}
+                        buttonTrue={true}
+                        transition={dashboardData?.recentTransitions}
                       />
-                    )}
-                  </div>
-                </div>
+                    </div>
 
-                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    <RecentTransitions
-                      headingTitle={"Expenses"}
-                      link={"/expense"}
-                      buttonTrue={true}
-                      transition={dashboardData?.last30DaysExpense.transition}
-                    />
+                    <div className="w-full lg:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                      {recentTransitionData.length > 0 && (
+                        <CustomPieChart
+                          title={"Financial Overview"}
+                          pieChartData={recentTransitionData}
+                          centerText={"Total Overview"}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    {recentExpenseData && recentExpenseData.length > 0 && (
-                      <BarChartData
-                        headingTitle={"Last 30 Days Expenses"}
-                        transition={recentExpenseData}
+                )}
+
+                {dashboardData?.last30DaysExpense.transition.length > 0 && (
+                  <div className="flex justify-between gap-8 lg:flex-row flex-col my-12">
+                    <div className="w-full lg:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                      <RecentTransitions
+                        headingTitle={"Expenses"}
+                        link={"/expense"}
+                        buttonTrue={true}
+                        transition={dashboardData?.last30DaysExpense.transition}
                       />
-                    )}
+                    </div>
+                    <div className="w-full lg:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                      {recentExpenseData && recentExpenseData.length > 0 && (
+                        <BarChartData
+                          headingTitle={"Last 30 Days Expenses"}
+                          transition={recentExpenseData}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex justify-between gap-8 md:flex-row flex-col my-12 md:gap-0">
-                  <div className="w-full md:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    {recentIncomeData && recentIncomeData.length > 0 && (
-                      <CustomPieChart
-                        title={"Last 30 Days Incomes"}
-                        pieChartData={recentIncomeData}
+                {dashboardData?.last60DaysIncome.transition.length > 0 && (
+                  <div className="flex justify-between gap-8 lg:flex-row flex-col my-12 ">
+                    <div className="w-full lg:w-[45%] h-[300px] shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                      {recentIncomeData && recentIncomeData.length > 0 && (
+                        <CustomPieChart
+                          title={"Last 30 Days Incomes"}
+                          pieChartData={recentIncomeData}
+                        />
+                      )}
+                    </div>
+
+                    <div className="w-full lg:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
+                      <RecentTransitions
+                        headingTitle={"Incomes"}
+                        link={"/income"}
+                        buttonTrue={true}
+                        transition={dashboardData?.last60DaysIncome.transition}
                       />
-                    )}
+                    </div>
                   </div>
-
-                  <div className="w-full md:w-[45%] h-[300px] overflow-y-scroll shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
-                    <RecentTransitions
-                      headingTitle={"Incomes"}
-                      link={"/income"}
-                      buttonTrue={true}
-                      transition={dashboardData?.last60DaysIncome.transition}
-                    />
-                  </div>
-                </div>
+                )}
               </>
             ) : (
               <div className="w-full h-full flex items-center justify-center">

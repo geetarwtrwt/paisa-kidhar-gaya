@@ -93,7 +93,7 @@ function page() {
               )}
             </div>
           </div>
-          {last60DaysIncome?.transition > 0 && (
+          {last60DaysIncome?.transition.length > 0 && (
             <div className="w-full shadow-xl border-borderLight border-2 rounded-md px-6 py-8">
               <RecentTransitions
                 headingTitle={"Incomes"}

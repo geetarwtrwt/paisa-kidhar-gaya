@@ -1,5 +1,5 @@
-import { User } from "@backend/model/user";
-import { connectDb } from "@backend/db/db";
+import { User } from "@/backend/model/user";
+import { connectDb } from "@/backend/db/db";
 import { NextResponse } from "next/server";
 // import { cloudinary } from "@backend/cloudinary";
 
