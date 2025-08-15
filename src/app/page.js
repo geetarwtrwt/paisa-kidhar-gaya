@@ -7,7 +7,6 @@ import RecentTransitions from "@/app/component/RecentTransitions";
 import CustomPieChart from "@/app/component/CustomPieChart";
 import BarChartData from "@/app/component/BarChartData";
 import { useAuth } from "@/app/UseAuth";
-import moment from "moment";
 
 export default function Home() {
   let { dashboardData } = useAuth();

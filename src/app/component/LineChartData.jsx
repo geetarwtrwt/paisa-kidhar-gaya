@@ -7,7 +7,6 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Bar,
 } from "recharts";
 
 function LineChartData({ headingTitle, transition }) {

@@ -1,4 +1,4 @@
-import  { Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
 
 let userSchema = new Schema(
@@ -24,7 +24,6 @@ let userSchema = new Schema(
   { timestamps: true }
 );
 
-// hash before save
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   let salt = await bcrypt.genSalt(10);
@@ -32,7 +31,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// password match method
 userSchema.methods.comparePassword = async function (enteredPass) {
   return await bcrypt.compare(enteredPass, this.password);
 };

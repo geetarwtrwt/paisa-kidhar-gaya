@@ -10,7 +10,6 @@ import moment from "moment";
 function page() {
   let { dashboardData, axios, toast, getDashBoardData } = useAuth();
   let { last30DaysExpense } = dashboardData || {};
-  console.log(dashboardData?.last30DaysExpense.transition);
   let recentExpenseData = last30DaysExpense?.transition.map((e) => ({
     name: e.title.charAt(0).toUpperCase() + e.title.slice(1),
     amount: e.amount,

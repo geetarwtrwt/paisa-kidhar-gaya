@@ -5,7 +5,6 @@ import { FiUpload, FiTrash } from "react-icons/fi";
 import Image from "next/image";
 import { FaRegUser } from "react-icons/fa";
 import { useAuth } from "@/app/UseAuth";
-import UploadMedia from "../component/UploadMedia";
 
 export default function MyAccountPage() {
   let { route, getUserData, getDashBoardData, toast } = useAuth();
@@ -82,7 +81,7 @@ export default function MyAccountPage() {
         const data = await cloudinaryRes.json();
         if (!data?.secure_url) throw new Error("Image upload failed");
 
-        const imageUrl = data.secure_url; // ✅ Sirf yeh string chahiye
+        const imageUrl = data.secure_url;
 
         let res = await axios.post("/api/user/signup", {
           fullName,
@@ -131,7 +130,6 @@ export default function MyAccountPage() {
 
         {!isLogin && (
           <div className="flex flex-col items-center gap-2 mb-4">
-            {/* <UploadMedia /> */}
             {imgPreview ? (
               <div className="w-20 h-20 relative overflow-hidden">
                 <Image
@@ -145,7 +143,6 @@ export default function MyAccountPage() {
                   onClick={handleImageDelete}
                   className="absolute right-0 bottom-0 bg-red-500 text-white rounded-full text-3xl p-1"
                 />
-                {/* </button> */}
               </div>
             ) : (
               <label className="cursor-pointer text-gray-600  flex items-center gap-1 group">
