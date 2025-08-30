@@ -36,7 +36,7 @@ export default function SideBar({ setOpen }) {
               width={80}
               height={80}
               priority
-              className="w-[100px] rounded-full border-primary border-2"
+              className="w-[100px] h-[100px] object-cover rounded-full border-primary border-2"
             />
           ) : (
             <FaUser className="w-[100px] h-[100px] rounded-full border-2 border-primary" />
